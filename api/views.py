@@ -1,6 +1,9 @@
 from .models import Faculty, Semester, Student, Teacher, Subject, Grade
 from .serializers import FacultySerilizer, SemesterSerializer, SubjectSerializer, TeacherSerializer,  StudentSerializer, GradeSerializer
+from .pagination import LictPagination
 from django.db.models import Count
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 
@@ -40,6 +43,12 @@ class TeacherViewSet(ModelViewSet):
 class StudentViewSet(ModelViewSet):
    queryset = Student.objects.select_related('faculty').all()
    serializer_class = StudentSerializer
+
+   filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+   search_fields = ['student_name', 'reg_no', 'email']
+   filterset_fields = ['faculty', 'semesters']
+   ordering_fields = ['student_name', 'faculty']
+  #  pagination_class = LictPagination
 
 
 
