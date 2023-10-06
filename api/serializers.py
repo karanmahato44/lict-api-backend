@@ -2,14 +2,14 @@ from rest_framework import serializers
 from .models import Student
 
 
-class StudentSerializer(serializers.Serializer):
-  id = serializers.IntegerField()
-  student_name = serializers.CharField()
-  email = serializers.EmailField()
-  faculty = serializers.StringRelatedField() # fk to Faculty
+class StudentSerializer(serializers.ModelSerializer):
+  # faculty = serializers.StringRelatedField()
+  performance = serializers.SerializerMethodField(method_name='get_perf', read_only=True)
 
-  # added field / annotated
-  email_added = serializers.SerializerMethodField(method_name='emailconcat')
+  # added/annotated field
+  def get_perf(self, student: Student):
+    return 'ok'
   
-  def emailconcat(self, student: Student):
-    return student.email + '_Xnice'
+  class Meta:
+    model = Student
+    fields = ['id', 'student_name', 'email', 'reg_no', 'faculty', 'semesters', 'performance']
