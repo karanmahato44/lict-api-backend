@@ -19,12 +19,26 @@ class FacultySerilizer(serializers.ModelSerializer):
 class SemesterSerializer(serializers.ModelSerializer):
   total_sem_students = serializers.IntegerField(read_only=True)
   faculty = serializers.StringRelatedField()
-  
+
   class Meta:
     model = Semester
-    fields = ['semester', 'faculty', 'total_sem_students']
+    fields = ['id', 'semester', 'faculty', 'total_sem_students']
 
 
+
+
+class SubjectSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Subject
+    fields = ['id', 'subject_name', 'faculties', 'semesters']
+
+
+
+
+class TeacherSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Teacher
+    fields = ['id', 'teacher_name', 'email', 'phone', 'faculties', 'semesters', 'subjects']
 
 
 
@@ -37,3 +51,18 @@ class StudentSerializer(serializers.ModelSerializer):
   class Meta:
     model = Student
     fields = ['id', 'student_name', 'email', 'reg_no', 'faculty', 'semesters', 'performance']
+
+
+
+
+class GradeSerializer(serializers.ModelSerializer):
+  semester = serializers.StringRelatedField()
+  subject = serializers.StringRelatedField()
+
+  class Meta:
+    model = Grade
+    fields = ['semester', 'subject', 'gpa']
+
+  def create(self, validated_data):
+    student_id = self.context['student_id']
+    return Grade.objects.create(student_id=student_id, **validated_data)
