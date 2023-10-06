@@ -1,13 +1,37 @@
 from rest_framework import serializers
-from .models import Student
+from .models import Faculty, Semester, Student, Teacher, Subject, Grade
+
+
+
+
+class FacultySerilizer(serializers.ModelSerializer):
+  total_students = serializers.IntegerField(read_only=True) # total_students doesn't exist in Faculty model, total_students annotated field is coming from the queryset in views, which Count s from a revers relation
+
+  class Meta:
+    model = Faculty
+    fields = ['id', 'faculty_name', 'batch_year', 'total_students']
+
+
+
+
+
+
+class SemesterSerializer(serializers.ModelSerializer):
+  total_sem_students = serializers.IntegerField(read_only=True)
+  faculty = serializers.StringRelatedField()
+  
+  class Meta:
+    model = Semester
+    fields = ['semester', 'faculty', 'total_sem_students']
+
+
+
 
 
 class StudentSerializer(serializers.ModelSerializer):
-  # faculty = serializers.StringRelatedField()
   performance = serializers.SerializerMethodField(method_name='get_perf', read_only=True)
 
-  # added/annotated field
-  def get_perf(self, student: Student):
+  def get_perf(self, student: Student): # added/annotated field
     return 'ok'
   
   class Meta:
