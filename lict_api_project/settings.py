@@ -42,12 +42,14 @@ INSTALLED_APPS = [
 
     'django_filters',
     'rest_framework',
+    'corsheaders',
     'djoser',
     'debug_toolbar',
     'api',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 
     'django.middleware.security.SecurityMiddleware',
@@ -152,3 +154,5 @@ SIMPLE_JWT = {
    'ACCESS_TOKEN_LIFETIME': timedelta(days=30)
 }
 
+# testing only
+CORS_ALLOW_ALL_ORIGINS = True

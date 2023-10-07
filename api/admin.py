@@ -10,7 +10,7 @@ from . import models
 
 @admin.register(models.Faculty)
 class FacultyAdmin(admin.ModelAdmin):
-  list_display = ['faculty_name', 'batch_year', 'total_students']
+  list_display = ['id', 'faculty_name', 'batch_year', 'total_students']
   search_fields = ['faculty_name']
 
   def get_queryset(self, request):
